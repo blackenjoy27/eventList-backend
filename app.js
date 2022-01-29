@@ -1,18 +1,23 @@
 const express = require("express");
-const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const mongoose = require("mongoose");
-const eventRoutes = require("./routes/event");
-const userRoutes = require("./routes/user");
+const movieRoutes = require("./routes/movie");
 
 
 
 var app = express();
+const options = {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  // useFindAndModify: false,
+  // useCreateIndex: true,
+};
 
 mongoose
   .connect(
-    "mongodb+srv://antra1018:antra1018@cluster0.0n0zy.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+    "mongodb+srv://kyleli:kyleli@cluster0.ii4e3.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+    options
   )
   .then((res) => {
     console.log(`connected to database: ${res}`);
@@ -25,7 +30,6 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
@@ -39,6 +43,5 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/api/event", eventRoutes);
-app.use("/api/user", userRoutes);
+app.use("/api/movies", movieRoutes);
 module.exports = app;
